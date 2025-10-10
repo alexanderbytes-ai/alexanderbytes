@@ -178,13 +178,14 @@ const observer = new IntersectionObserver(entries => {
 sections.forEach(sec => observer.observe(sec));
 
 // =========================
-// Newsletter Modal
+// Newsletter Modal with localStorage
 // =========================
 const modal = document.getElementById('newsletter-modal');
 const overlay = document.getElementById('modal-overlay');
 const closeBtn = document.getElementById('close-newsletter');
 
 function showNewsletter() {
+  if(localStorage.getItem('newsletterClosed') === 'true') return;
   overlay.style.display='block';
   modal.style.display='block';
   setTimeout(()=>{
@@ -192,9 +193,11 @@ function showNewsletter() {
     overlay.style.opacity='1';
   },50);
 }
+
 function closeNewsletter() {
   modal.classList.remove('show','animate');
   overlay.style.opacity='0';
+  localStorage.setItem('newsletterClosed','true');
   setTimeout(()=>{
     modal.style.display='none';
     overlay.style.display='none';
@@ -206,24 +209,54 @@ closeBtn.onclick = overlay.onclick = closeNewsletter;
 window.addEventListener('message', e => { if(e.data==='closeNewsletter') closeNewsletter(); });
 
 // =========================
-// Particle System
+// Particle System (smooth & organic)
 // =========================
 const canvas = document.getElementById('particle-canvas');
 const ctx = canvas.getContext('2d');
-let particles=[], width=canvas.width=window.innerWidth, height=canvas.height=window.innerHeight;
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
 const particleCount = 90;
+let particles = [];
 
 class Particle {
-  constructor(){ this.reset(); }
-  reset(){ this.x=Math.random()*width; this.y=Math.random()*height; this.size=Math.random()*2+1; this.speed=Math.random()*0.4+0.1; this.angle=Math.random()*2*Math.PI; }
-  update(){ this.x+=Math.cos(this.angle)*this.speed; this.y+=Math.sin(this.angle)*this.speed; if(this.x<0||this.x>width||this.y<0||this.y>height) this.reset(); }
-  draw(){ ctx.fillStyle="rgba(255,255,255,0.08)"; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); }
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * width;
+    this.y = Math.random() * height;
+    this.size = Math.random() * 2 + 1;
+    this.speed = Math.random() * 0.4 + 0.1;
+    this.angle = Math.random() * 2 * Math.PI;
+    this.opacity = Math.random() * 0.08 + 0.02;
+  }
+  update() {
+    this.x += Math.cos(this.angle) * this.speed;
+    this.y += Math.sin(this.angle) * this.speed;
+    if (this.x < -10 || this.x > width+10 || this.y < -10 || this.y > height+10) this.reset();
+  }
+  draw() {
+    ctx.fillStyle = `rgba(255,255,255,${this.opacity})`;
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+    ctx.fill();
+  }
 }
 
-function initParticles(){ particles=[]; for(let i=0;i<particleCount;i++) particles.push(new Particle()); }
-function animateParticles(){ ctx.clearRect(0,0,width,height); particles.forEach(p=>{ p.update(); p.draw(); }); requestAnimationFrame(animateParticles); }
+function initParticles() {
+  particles = [];
+  for(let i=0;i<particleCount;i++) particles.push(new Particle());
+}
 
-window.addEventListener('resize', ()=>{ width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; initParticles(); });
+function animateParticles() {
+  ctx.clearRect(0,0,width,height);
+  particles.forEach(p=>{ p.update(); p.draw(); });
+  requestAnimationFrame(animateParticles);
+}
+
+window.addEventListener('resize', ()=>{
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+  initParticles();
+});
 
 initParticles();
 animateParticles();
