@@ -1,114 +1,116 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>ALEXANDERBYTES</title>
-  <style>
-    html, body {
-      margin:0; padding:0; height:100%;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-      color:#fff; background:#000; overflow-x:hidden;
-    }
-    section {
-      min-height:100vh; padding:60px 20px;
-      display:flex; align-items:center; justify-content:center;
-      flex-direction:column; text-align:center;
-    }
-    .title { font-size:3rem; letter-spacing:0.1em; margin-bottom:1rem; opacity:0; transform:translateY(20px); transition: all 0.8s ease; }
-    .tagline { font-size:1.4rem; opacity:0; transform:translateY(20px); transition: all 0.8s ease 0.2s; }
-    .btn { margin-top:2rem; padding:0.8em 2em; background:#fff; color:#000; border:none; border-radius:4px; font-size:1rem; cursor:pointer; opacity:0; transform:translateY(20px); transition: all 0.8s ease 0.4s; }
-    section.visible .title, section.visible .tagline, section.visible .btn { opacity:1; transform:translateY(0); }
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ALEXANDERBYTES</title>
+<style>
+html, body {
+  margin:0; padding:0; height:100%;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:#fff; background:#000; overflow-x:hidden;
+  transition: filter 0.3s ease;
+}
 
-    /* Newsletter modal */
-    #newsletter-modal {
-      display:none; position:fixed; top:0; left:0;
-      width:100%; height:100%; background:rgba(0,0,0,0.85);
-      justify-content:center; align-items:center; z-index:999;
-      animation: fadeIn 0.5s ease;
-    }
-    #newsletter-content {
-      background:#111; padding:20px; border-radius:12px;
-      max-width:600px; width:90%; max-height:90vh;
-      overflow-y:auto; position:relative; text-align:center;
-    }
-    #newsletter-content iframe { width:100%; height:50vh; min-height:300px; max-height:500px; border-radius:8px; border:none; }
-    #close-newsletter { position:absolute; top:10px; right:10px; background:none; border:none; font-size:1.5rem; color:#fff; cursor:pointer; }
+/* Blur background when newsletter open */
+body.blur { filter: blur(5px) brightness(0.8); }
 
-    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-    @media (max-width:768px) {
-      .title { font-size:2rem; }
-      .tagline { font-size:1rem; }
-      .btn { font-size:0.9rem; padding:0.6em 1.5em; }
-    }
-    @media (max-width:480px) {
-      #newsletter-content iframe { height:40vh; min-height:250px; }
-    }
-  </style>
+section {
+  min-height:100vh; padding:60px 20px;
+  display:flex; align-items:center; justify-content:center;
+  flex-direction:column; text-align:center;
+}
+.title { font-size:3rem; letter-spacing:0.1em; margin-bottom:1rem; opacity:0; transform:translateY(20px); transition: all 0.8s ease; }
+.tagline { font-size:1.4rem; opacity:0; transform:translateY(20px); transition: all 0.8s ease 0.2s; }
+.btn { margin-top:2rem; padding:0.8em 2em; background:#fff; color:#000; border:none; border-radius:4px; font-size:1rem; cursor:pointer; opacity:0; transform:translateY(20px); transition: all 0.8s ease 0.4s; }
+section.visible .title, section.visible .tagline, section.visible .btn { opacity:1; transform:translateY(0); }
+
+/* Newsletter modal */
+#newsletter-modal {
+  display:none;
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.75); justify-content:center; align-items:flex-start;
+  z-index:999; animation: fadeOverlay 0.5s ease forwards;
+}
+#newsletter-content {
+  background:#111; padding:20px; border-radius:12px;
+  max-width:600px; width:90%; max-height:90vh; overflow-y:auto;
+  position:relative; text-align:center; transform:translateY(-50px); opacity:0;
+  animation: slideDown 0.6s ease forwards 0.2s;
+}
+#newsletter-content iframe { width:100%; height:50vh; min-height:300px; max-height:500px; border-radius:8px; border:none; }
+#close-newsletter { position:absolute; top:10px; right:10px; background:none; border:none; font-size:1.5rem; color:#fff; cursor:pointer; }
+
+@keyframes fadeOverlay { from {opacity:0;} to {opacity:1;} }
+@keyframes slideDown { from {opacity:0; transform:translateY(-50px);} to {opacity:1; transform:translateY(0);} }
+
+@media (max-width:768px) {
+  .title { font-size:2rem; }
+  .tagline { font-size:1rem; }
+  .btn { font-size:0.9rem; padding:0.6em 1.5em; }
+}
+@media (max-width:480px) {
+  #newsletter-content iframe { height:40vh; min-height:250px; }
+}
+</style>
 </head>
 <body>
 
-  <!-- Hercules Section -->
-  <section id="hercules">
-    <div class="title">HERCULES</div>
-    <div class="tagline">Music</div>
-    <button class="btn" onclick="window.open('https://artists.landr.com/hercules','_blank')">Stream Now</button>
-  </section>
+<!-- Hercules Section -->
+<section id="hercules">
+  <div class="title">HERCULES</div>
+  <div class="tagline">Music</div>
+  <button class="btn" onclick="window.open('https://artists.landr.com/hercules','_blank')">Stream Now</button>
+</section>
 
-  <!-- FAF Section -->
-  <section id="faf">
-    <div class="title">FAF</div>
-    <div class="tagline">Music</div>
-    <button class="btn" onclick="window.open('https://artists.landr.com/FAF','_blank')">Stream Now</button>
-  </section>
+<!-- FAF Section -->
+<section id="faf">
+  <div class="title">FAF</div>
+  <div class="tagline">Music</div>
+  <button class="btn" onclick="window.open('https://artists.landr.com/FAF','_blank')">Stream Now</button>
+</section>
 
-  <!-- Newsletter Modal -->
-  <div id="newsletter-modal">
-    <div id="newsletter-content">
-      <button id="close-newsletter">&times;</button>
-      <iframe src="newsletter.html"></iframe>
-    </div>
+<!-- Newsletter Modal -->
+<div id="newsletter-modal">
+  <div id="newsletter-content">
+    <button id="close-newsletter">&times;</button>
+    <iframe src="newsletter.html"></iframe>
   </div>
+</div>
 
-  <script>
-    // Section scroll animation
-    const sections = document.querySelectorAll('section');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
-    }, { threshold: 0.3 });
-    sections.forEach(sec => observer.observe(sec));
+<script>
+// Section animations
+const sections = document.querySelectorAll('section');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.3 });
+sections.forEach(sec => observer.observe(sec));
 
-    // Newsletter popup
-    const modal = document.getElementById('newsletter-modal');
-    const closeBtn = document.getElementById('close-newsletter');
+// Newsletter logic
+const modal = document.getElementById('newsletter-modal');
+const closeBtn = document.getElementById('close-newsletter');
 
-    function showNewsletter() {
-      if(!localStorage.getItem('hideNewsletter')) {
-        modal.style.display = 'flex';
-      }
-    }
-    setTimeout(showNewsletter, 2000);
+function showNewsletter() {
+  if(!localStorage.getItem('hideNewsletter')) {
+    modal.style.display = 'flex';
+    document.body.classList.add('blur');
+  }
+}
 
-    closeBtn.onclick = () => {
-      modal.style.display='none';
-      localStorage.setItem('hideNewsletter','true');
-    }
+setTimeout(showNewsletter, 2000);
 
-    modal.onclick = e => {
-      if(e.target === modal) {
-        modal.style.display='none';
-        localStorage.setItem('hideNewsletter','true');
-      }
-    }
+function closeNewsletter() {
+  modal.style.display = 'none';
+  document.body.classList.remove('blur');
+  localStorage.setItem('hideNewsletter','true');
+}
 
-    // Listen for message from newsletter iframe
-    window.addEventListener('message', (e) => {
-      if(e.data === 'closeNewsletter') {
-        modal.style.display='none';
-        localStorage.setItem('hideNewsletter','true');
-      }
-    });
-  </script>
+closeBtn.onclick = closeNewsletter;
+modal.onclick = e => { if(e.target===modal) closeNewsletter(); }
+
+// Listen for iframe "Don't show again"
+window.addEventListener('message', (e) => { if(e.data==='closeNewsletter') closeNewsletter(); });
+</script>
 
 </body>
 </html>
