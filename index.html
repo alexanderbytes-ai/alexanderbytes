@@ -11,9 +11,16 @@ html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color:#fff; background:#000; overflow-x:hidden;
   scroll-behavior: smooth;
+  position: relative;
 }
 
-/* Background Parallax + ambient glow */
+/* Particle canvas */
+#particle-canvas {
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  z-index:-3; pointer-events:none;
+}
+
+/* Parallax background + ambient glow */
 body::before {
   content:'';
   position:fixed; top:0; left:0; width:100%; height:100%;
@@ -87,38 +94,35 @@ section.visible { opacity:1; transform:translateY(0); }
   transition: all 0.7s cubic-bezier(0.65,0,0.35,1);
 }
 #newsletter-modal.show { transform:translate(-50%,-50%) scale(1); opacity:1; }
-
-/* Smooth bounce-in animation */
+#newsletter-modal.animate { animation: modalBounce 0.7s cubic-bezier(0.65,0,0.35,1) forwards; }
 @keyframes modalBounce {
   0% { transform: translate(-50%,-60%) scale(0.7); opacity:0; }
   60% { transform: translate(-50%,-48%) scale(1.05); opacity:1; }
   80% { transform: translate(-50%,-50%) scale(0.97); }
   100% { transform: translate(-50%,-50%) scale(1); }
 }
-#newsletter-modal.animate { animation: modalBounce 0.7s cubic-bezier(0.65,0,0.35,1) forwards; }
 
 #newsletter-modal iframe { width:100%; height:55vh; min-height:350px; border-radius:14px; border:none; }
-
 #close-newsletter {
   position:absolute; top:15px; right:15px;
   background:none; border:none; font-size:1.8rem; color:#fff; cursor:pointer;
   transition: all 0.2s ease;
 }
 #close-newsletter:hover { transform:scale(1.25); color:#f0f0f0; }
-
 </style>
 </head>
 <body>
+<canvas id="particle-canvas"></canvas>
 
 <section id="hercules">
   <div class="title">HERCULES</div>
-  <div class="tagline">Music Experience</div>
+  <div class="tagline">Music</div>
   <button class="btn" onclick="window.open('https://artists.landr.com/hercules','_blank')">Stream Now</button>
 </section>
 
 <section id="faf">
   <div class="title">FAF</div>
-  <div class="tagline">Music Experience</div>
+  <div class="tagline">Music</div>
   <button class="btn" onclick="window.open('https://artists.landr.com/FAF','_blank')">Stream Now</button>
 </section>
 
@@ -152,9 +156,30 @@ function closeNewsletter() {
 
 window.addEventListener('load', ()=>setTimeout(showNewsletter,2000));
 closeBtn.onclick = overlay.onclick = closeNewsletter;
-
-// Listen for iframe message
 window.addEventListener('message', e => { if(e.data==='closeNewsletter') closeNewsletter(); });
+
+// Particle system
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
+const particleCount = 80;
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() { this.x=Math.random()*width; this.y=Math.random()*height; this.size=Math.random()*2+1; this.speed=Math.random()*0.3+0.1; this.angle=Math.random()*2*Math.PI; }
+  update() { this.x+=Math.cos(this.angle)*this.speed; this.y+=Math.sin(this.angle)*this.speed; if(this.x<0||this.x>width||this.y<0||this.y>height)this.reset(); }
+  draw() { ctx.fillStyle="rgba(255,255,255,0.08)"; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); }
+}
+
+function initParticles(){ particles=[]; for(let i=0;i<particleCount;i++) particles.push(new Particle()); }
+function animateParticles(){ ctx.clearRect(0,0,width,height); particles.forEach(p=>{ p.update(); p.draw(); }); requestAnimationFrame(animateParticles); }
+
+window.addEventListener('resize', ()=>{ width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; initParticles(); });
+
+initParticles();
+animateParticles();
 </script>
 </body>
 </html>
