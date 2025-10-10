@@ -5,64 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Newsletter</title>
 <style>
-html, body {
-  margin:0; padding:0; height:100%;
-  font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background:rgba(0,0,0,0.95); color:#fff;
-  display:flex; justify-content:center; align-items:center;
-}
-
-#newsletter-container {
-  padding:40px; border-radius:28px;
-  max-width:600px; width:90%; text-align:center;
-  backdrop-filter: blur(20px); background:rgba(30,30,30,0.85);
-  box-shadow:0 40px 80px rgba(0,0,0,0.65), 0 0 60px rgba(255,255,255,0.05);
-  transition: all 0.4s ease;
-}
-#newsletter-container:hover { transform:scale(1.02); box-shadow:0 50px 100px rgba(0,0,0,0.75), 0 0 80px rgba(255,255,255,0.1); }
-
-h2 {
-  font-size:2.6rem; margin-bottom:18px;
-  text-shadow:0 0 20px rgba(255,255,255,0.3);
-}
-
-p {
-  margin-bottom:28px; opacity:0.9; font-size:1.15rem; line-height:1.6;
-}
-
-iframe {
-  width:100%; height:350px; border-radius:16px; border:none; margin-bottom:20px;
-  transition: transform 0.35s ease;
-}
-iframe:hover { transform:scale(1.02); }
-
-.btn {
-  margin-top:14px; padding:0.85em 2.2em; font-size:1.15rem; font-weight:500;
-  border:none; border-radius:18px; cursor:pointer;
-  background:rgba(255,255,255,0.18); color:#fff; backdrop-filter: blur(14px);
-  transition: all 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
-.btn:hover {
-  transform:scale(1.08);
-  background:rgba(255,255,255,0.28);
-  box-shadow:0 16px 32px rgba(255,255,255,0.18);
-}
-
-@media (max-width:768px) {
-  h2 { font-size:2rem; }
-  p { font-size:1rem; }
-  .btn { font-size:1rem; padding:0.75em 2em; }
-}
+html, body {margin:0; padding:0; height:100%; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:rgba(0,0,0,0.95); color:#fff; display:flex; justify-content:center; align-items:center; perspective:1500px;}
+#newsletter-container {padding:40px; border-radius:28px; max-width:600px; width:90%; text-align:center; backdrop-filter: blur(20px); background:rgba(30,30,30,0.85); box-shadow:0 40px 80px rgba(0,0,0,0.65),0 0 60px rgba(255,255,255,0.05); transition: all 0.4s ease, transform 0.4s ease; transform-style: preserve-3d;}
+#newsletter-container:hover {transform:scale(1.02) rotateX(2deg) rotateY(-1deg); box-shadow:0 50px 100px rgba(0,0,0,0.75),0 0 80px rgba(255,255,255,0.1);}
+h2 { font-size:2.6rem; margin-bottom:18px; text-shadow:0 0 20px rgba(255,255,255,0.3);}
+p { margin-bottom:28px; opacity:0.9; font-size:1.15rem; line-height:1.6;}
+iframe { width:100%; height:350px; border-radius:16px; border:none; margin-bottom:20px; transition: transform 0.35s ease;}
+iframe:hover { transform:scale(1.02) rotateY(1deg);}
+.btn { margin-top:14px; padding:0.85em 2.2em; font-size:1.15rem; font-weight:500; border:none; border-radius:18px; cursor:pointer; background:rgba(255,255,255,0.18); color:#fff; backdrop-filter: blur(14px); transition: all 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; transform-style: preserve-3d;}
+.btn:hover { transform:scale(1.08) rotateX(1deg) rotateY(1deg); background:rgba(255,255,255,0.28); box-shadow:0 16px 32px rgba(255,255,255,0.18);}
+@media(max-width:768px){h2{font-size:2rem;} p{font-size:1rem;} .btn{font-size:1rem; padding:0.75em 2em;}}
 </style>
 </head>
 <body>
 <div id="newsletter-container">
   <h2>Stay Connected 🚀</h2>
   <p>Get updates on new drops, exclusive projects, and behind-the-scenes content.</p>
-
   <iframe src="https://84626b95.sibforms.com/serve/MUIFAEZRMA9XI6yp5-9I_5gXKQI4DUUT0vXVwDmhMCEwdyVXT7qPTG5hdkNXkb_eL_IAKLdNmNVPQSzKzhUw2AQmsk4STpAoxIMkD-2R4YolSsP5Jk0T0Bvh2ilSGzA7UAOQPtwjGubdQauk6vy_llAXLEMzgv8Q2b0-p3XOryayZK6e7IFN4WfXLP1DxyMEcEDQ9FM7RZvMSw3SHQ==" frameborder="0" scrolling="auto"></iframe>
-
   <button class="btn" onclick="parent.postMessage('closeNewsletter','*')">Don't show again</button>
 </div>
+<script>
+let mouseX=0, mouseY=0;
+const container=document.getElementById('newsletter-container');
+window.addEventListener('mousemove', e=>{
+  mouseX=e.clientX; mouseY=e.clientY;
+  const centerX=window.innerWidth/2, centerY=window.innerHeight/2;
+  const rotateY=(mouseX-centerX)/centerX*5;
+  const rotateX=-(mouseY-centerY)/centerY*5;
+  container.style.transform=`scale(1.02) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+});
+</script>
 </body>
 </html>
