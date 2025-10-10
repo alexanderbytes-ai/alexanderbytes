@@ -8,20 +8,34 @@
 html, body {
   margin:0; padding:0; height:100%;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  background:#000; color:#fff; overflow-x:hidden;
+  color:#fff; background:#000; overflow-x:hidden;
+  scroll-behavior: smooth;
 }
+
+/* Section styling + animation */
 section {
   min-height:100vh; padding:60px 20px;
   display:flex; align-items:center; justify-content:center;
   flex-direction:column; text-align:center;
-  opacity:0; transform:translateY(40px);
-  transition: all 0.8s ease;
+  opacity:0; transform:translateY(50px);
+  transition: all 0.8s cubic-bezier(0.68,-0.55,0.265,1.55);
 }
 section.visible { opacity:1; transform:translateY(0); }
 
-.title { font-size:3rem; letter-spacing:0.1em; margin-bottom:1rem; }
-.tagline { font-size:1.4rem; margin-bottom:1rem; }
-.btn { padding:0.8em 2em; background:#fff; color:#000; border:none; border-radius:6px; cursor:pointer; font-size:1rem; }
+.title {
+  font-size:3rem; letter-spacing:0.1em; margin-bottom:1rem;
+  text-shadow:0 0 8px rgba(255,255,255,0.3);
+  transition: all 0.5s ease;
+}
+.title:hover { text-shadow:0 0 20px rgba(255,255,255,0.6); }
+
+.tagline { font-size:1.4rem; margin-bottom:1rem; opacity:0.8; }
+.btn {
+  padding:0.8em 2em; background:#fff; color:#000;
+  border:none; border-radius:6px; cursor:pointer; font-size:1rem;
+  transition: all 0.3s ease, transform 0.3s ease;
+}
+.btn:hover { transform: translateY(-3px) scale(1.05); box-shadow:0 10px 20px rgba(255,255,255,0.2); }
 
 @media (max-width:768px) {
   .title { font-size:2rem; }
@@ -29,26 +43,39 @@ section.visible { opacity:1; transform:translateY(0); }
   .btn { font-size:0.9rem; padding:0.6em 1.5em; }
 }
 
-/* Newsletter modal */
-#newsletter-modal {
+/* Floating newsletter modal + overlay */
+#modal-overlay {
   display:none;
   position:fixed; top:0; left:0; width:100%; height:100%;
-  background:rgba(0,0,0,0.75); justify-content:center; align-items:flex-start;
-  z-index:999;
+  background:rgba(0,0,0,0.3); backdrop-filter: blur(6px);
+  z-index:998; opacity:0; transition: opacity 0.4s ease;
 }
-#newsletter-content {
-  background:#111; padding:20px; border-radius:12px;
-  max-width:600px; width:90%; max-height:90vh; overflow-y:auto;
-  position:relative; text-align:center;
-  transform:translateY(-50px) scale(0.9); opacity:0;
-  transition: all 0.5s cubic-bezier(0.68,-0.55,0.265,1.55);
-}
-#newsletter-content.show { transform:translateY(0) scale(1); opacity:1; }
 
-#newsletter-content iframe { width:100%; height:50vh; min-height:300px; max-height:500px; border-radius:8px; border:none; }
+#newsletter-modal {
+  display:none;
+  position:fixed; top:50%; left:50%;
+  transform:translate(-50%,-50%) scale(0.8);
+  background:#111; padding:20px; border-radius:16px;
+  max-width:600px; width:90%; max-height:90vh; overflow-y:auto;
+  text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.5);
+  z-index:999; opacity:0;
+  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
+}
+#newsletter-modal.show { transform:translate(-50%,-50%) scale(1); opacity:1; }
+
+#newsletter-modal iframe { width:100%; height:50vh; min-height:300px; max-height:500px; border-radius:10px; border:none; }
 #close-newsletter { position:absolute; top:10px; right:10px; background:none; border:none; font-size:1.5rem; color:#fff; cursor:pointer; }
 
-@media (max-width:480px) { #newsletter-content iframe { height:40vh; min-height:250px; } }
+/* Parallax background effect */
+body::before {
+  content:'';
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  background:url('https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+  z-index:-1; filter: brightness(0.2);
+  transform: translateZ(0) scale(1.1);
+  transition: transform 0.3s ease;
+}
+
 </style>
 </head>
 <body>
@@ -65,43 +92,49 @@ section.visible { opacity:1; transform:translateY(0); }
   <button class="btn" onclick="window.open('https://artists.landr.com/FAF','_blank')">Stream Now</button>
 </section>
 
+<div id="modal-overlay"></div>
 <div id="newsletter-modal">
-  <div id="newsletter-content">
-    <button id="close-newsletter">&times;</button>
-    <iframe src="newsletter.html"></iframe>
-  </div>
+  <button id="close-newsletter">&times;</button>
+  <iframe src="newsletter.html"></iframe>
 </div>
 
 <script>
-// Animate sections
+// Section fade-in/out on scroll
 const sections = document.querySelectorAll('section');
-const sectionObserver = new IntersectionObserver(entries => {
+const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if(entry.isIntersecting) entry.target.classList.add('visible');
     else entry.target.classList.remove('visible');
   });
-}, { threshold: 0.2 });
-sections.forEach(sec => sectionObserver.observe(sec));
+}, { threshold:0.25 });
+sections.forEach(sec => observer.observe(sec));
 
-// Newsletter popup
+// Newsletter modal
 const modal = document.getElementById('newsletter-modal');
-const content = document.getElementById('newsletter-content');
+const overlay = document.getElementById('modal-overlay');
 const closeBtn = document.getElementById('close-newsletter');
 
 function showNewsletter() {
-  modal.style.display = 'flex';
-  setTimeout(()=> content.classList.add('show'), 50); // small delay for spring effect
+  overlay.style.display='block';
+  modal.style.display='block';
+  setTimeout(()=>{ modal.classList.add('show'); overlay.style.opacity='1'; },50);
 }
 setTimeout(showNewsletter, 2000);
 
 function closeNewsletter() {
-  content.classList.remove('show');
-  setTimeout(()=> modal.style.display='none', 400); // wait for animation
+  modal.classList.remove('show');
+  overlay.style.opacity='0';
+  setTimeout(()=>{ modal.style.display='none'; overlay.style.display='none'; },500);
 }
 closeBtn.onclick = closeNewsletter;
-modal.onclick = e => { if(e.target===modal) closeNewsletter(); }
+overlay.onclick = closeNewsletter;
 
-// Listen for iframe message (Don't show again)
+// Parallax scroll effect
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  document.body.style.setProperty('--parallax', `${scrolled * 0.3}px`);
+  document.body.querySelector('::before');
+});
 window.addEventListener('message', e => {
   if(e.data==='closeNewsletter') closeNewsletter();
 });
