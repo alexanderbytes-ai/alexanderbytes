@@ -5,17 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 <title>Newsletter</title>
 <style>
-/* Base Reset */
+/* Reset & Base */
 * { margin:0; padding:0; box-sizing:border-box; }
-html, body { 
+html, body {
   height:100%; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
   background:#0a0a0a; color:#fff; display:flex; justify-content:center; align-items:center;
+  overflow-x:hidden;
 }
 
 /* Container */
 #newsletter-container {
   width:90%; max-width:600px; padding:35px;
-  background:rgba(25,25,25,0.9); backdrop-filter:blur(18px);
+  background:rgba(25,25,25,0.95); backdrop-filter:blur(18px);
   border-radius:24px; text-align:center;
   box-shadow:0 40px 80px rgba(0,0,0,0.65), 0 0 60px rgba(255,255,255,0.05);
   transition: transform 0.4s ease, opacity 0.4s ease;
@@ -30,7 +31,7 @@ p {
   font-size:1.15rem; line-height:1.6; margin-bottom:26px; opacity:0.9;
 }
 
-/* Iframe Styling */
+/* Iframe */
 iframe {
   width:100%; height:400px; max-height:60vh;
   border:none; border-radius:16px; margin-bottom:20px;
@@ -49,7 +50,7 @@ iframe {
   box-shadow:0 14px 28px rgba(255,255,255,0.18);
 }
 
-@media (max-width:768px) {
+@media (max-width:768px){
   h2 { font-size:2rem; }
   p { font-size:1rem; }
   iframe { height:300px; }
@@ -62,7 +63,6 @@ iframe {
   <h2>Stay Connected 🚀</h2>
   <p>Get updates on new drops, exclusive projects, and behind-the-scenes content.</p>
   
-  <!-- NEW Bravo Iframe -->
   <iframe src="https://84626b95.sibforms.com/serve/MUIFAEZRMA9XI6yp5-9I_5gXKQI4DUUT0vXVwDmhMCEwdyVXT7qPTG5hdkNXkb_eL_IAKLdNmNVPQSzKzhUw2AQmsk4STpAoxIMkD-2R4YolSsP5Jk0T0Bvh2ilSGzA7UAOQPtwjGubdQauk6vy_llAXLEMzgv8Q2b0-p3XOryayZK6e7IFN4WfXLP1DxyMEcEDQ9FM7RZvMSw3SHQ==" allowfullscreen scrolling="auto"></iframe>
   
   <button class="btn" onclick="parent.postMessage('closeNewsletter','*')">Don't show again</button>
