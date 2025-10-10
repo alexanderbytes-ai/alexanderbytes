@@ -7,7 +7,7 @@
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; color:#fff; background:#000; overflow-x:hidden; }
-    
+
     section { min-height:100vh; padding:60px 20px; display:flex; align-items:center; justify-content:center; flex-direction:column; position:relative; text-align:center; }
     .title { font-size:3rem; letter-spacing:0.1em; margin-bottom:1rem; opacity:0; transform:translateY(20px); transition: all 0.8s ease; }
     .tagline { font-size:1.4rem; opacity:0; transform:translateY(20px); transition: all 0.8s ease 0.2s; }
@@ -17,8 +17,10 @@
     /* Newsletter modal */
     #newsletter-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:999; }
     #newsletter-content { background:#111; padding:20px; border-radius:12px; max-width:600px; width:90%; max-height:90vh; overflow-y:auto; position:relative; text-align:center; }
-    #close-newsletter { position:absolute; top:10px; right:10px; background:none; border:none; font-size:1.5rem; color:#fff; cursor:pointer; }
-    
+    #close-newsletter, #dont-show { position:absolute; top:10px; background:none; border:none; font-size:1rem; color:#fff; cursor:pointer; }
+    #close-newsletter { right:10px; font-size:1.5rem; }
+    #dont-show { left:10px; }
+
     @media (max-width:768px) {
       .title { font-size:2rem; }
       .tagline { font-size:1rem; }
@@ -46,6 +48,7 @@
   <div id="newsletter-modal">
     <div id="newsletter-content">
       <button id="close-newsletter">&times;</button>
+      <button id="dont-show">Don't show again</button>
       <iframe src="newsletter.html" style="width:100%; height:100%; min-height:300px; border:none; border-radius:8px;"></iframe>
     </div>
   </div>
@@ -58,12 +61,27 @@
     }, {threshold:0.3});
     sections.forEach(sec => observer.observe(sec));
 
-    // Newsletter popup
+    // Newsletter popup with "Don't show again"
     const modal = document.getElementById('newsletter-modal');
     const closeBtn = document.getElementById('close-newsletter');
-    setTimeout(()=>{ modal.style.display='flex'; }, 2000);
+    const dontShowBtn = document.getElementById('dont-show');
+
+    function showModal() {
+      if (!localStorage.getItem('hideNewsletter')) {
+        modal.style.display = 'flex';
+      }
+    }
+
+    // Show after 2 seconds
+    setTimeout(showModal, 2000);
+
     closeBtn.onclick = () => { modal.style.display='none'; }
     modal.onclick = e => { if(e.target===modal) modal.style.display='none'; }
+
+    dontShowBtn.onclick = () => {
+      localStorage.setItem('hideNewsletter', 'true');
+      modal.style.display='none';
+    }
   </script>
 
 </body>
