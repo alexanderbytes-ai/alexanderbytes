@@ -8,35 +8,42 @@
 html, body {
   margin:0; padding:0; height:100%;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  color:#fff; background:#000; overflow-x:hidden;
+  background:#000; color:#fff; overflow-x:hidden;
   transition: filter 0.3s ease;
 }
-
-/* Blur background when newsletter open */
 body.blur { filter: blur(5px) brightness(0.8); }
 
 section {
   min-height:100vh; padding:60px 20px;
   display:flex; align-items:center; justify-content:center;
   flex-direction:column; text-align:center;
+  opacity:0; transform:translateY(40px);
+  transition: all 0.8s ease;
 }
-.title { font-size:3rem; letter-spacing:0.1em; margin-bottom:1rem; opacity:0; transform:translateY(20px); transition: all 0.8s ease; }
-.tagline { font-size:1.4rem; opacity:0; transform:translateY(20px); transition: all 0.8s ease 0.2s; }
-.btn { margin-top:2rem; padding:0.8em 2em; background:#fff; color:#000; border:none; border-radius:4px; font-size:1rem; cursor:pointer; opacity:0; transform:translateY(20px); transition: all 0.8s ease 0.4s; }
-section.visible .title, section.visible .tagline, section.visible .btn { opacity:1; transform:translateY(0); }
+section.visible { opacity:1; transform:translateY(0); }
+
+.title { font-size:3rem; letter-spacing:0.1em; margin-bottom:1rem; }
+.tagline { font-size:1.4rem; margin-bottom:1rem; }
+.btn { padding:0.8em 2em; background:#fff; color:#000; border:none; border-radius:6px; cursor:pointer; font-size:1rem; }
+
+@media (max-width:768px) {
+  .title { font-size:2rem; }
+  .tagline { font-size:1rem; }
+  .btn { font-size:0.9rem; padding:0.6em 1.5em; }
+}
 
 /* Newsletter modal */
 #newsletter-modal {
   display:none;
   position:fixed; top:0; left:0; width:100%; height:100%;
   background:rgba(0,0,0,0.75); justify-content:center; align-items:flex-start;
-  z-index:999; animation: fadeOverlay 0.5s ease forwards;
+  z-index:999; animation: fadeOverlay 0.4s ease forwards;
 }
 #newsletter-content {
   background:#111; padding:20px; border-radius:12px;
   max-width:600px; width:90%; max-height:90vh; overflow-y:auto;
   position:relative; text-align:center; transform:translateY(-50px); opacity:0;
-  animation: slideDown 0.6s ease forwards 0.2s;
+  animation: slideDown 0.5s ease forwards 0.2s;
 }
 #newsletter-content iframe { width:100%; height:50vh; min-height:300px; max-height:500px; border-radius:8px; border:none; }
 #close-newsletter { position:absolute; top:10px; right:10px; background:none; border:none; font-size:1.5rem; color:#fff; cursor:pointer; }
@@ -44,26 +51,18 @@ section.visible .title, section.visible .tagline, section.visible .btn { opacity
 @keyframes fadeOverlay { from {opacity:0;} to {opacity:1;} }
 @keyframes slideDown { from {opacity:0; transform:translateY(-50px);} to {opacity:1; transform:translateY(0);} }
 
-@media (max-width:768px) {
-  .title { font-size:2rem; }
-  .tagline { font-size:1rem; }
-  .btn { font-size:0.9rem; padding:0.6em 1.5em; }
-}
-@media (max-width:480px) {
-  #newsletter-content iframe { height:40vh; min-height:250px; }
-}
+@media (max-width:480px) { #newsletter-content iframe { height:40vh; min-height:250px; } }
 </style>
 </head>
 <body>
 
-<!-- Hercules Section -->
+<!-- Sections -->
 <section id="hercules">
   <div class="title">HERCULES</div>
   <div class="tagline">Music</div>
   <button class="btn" onclick="window.open('https://artists.landr.com/hercules','_blank')">Stream Now</button>
 </section>
 
-<!-- FAF Section -->
 <section id="faf">
   <div class="title">FAF</div>
   <div class="tagline">Music</div>
@@ -79,12 +78,15 @@ section.visible .title, section.visible .tagline, section.visible .btn { opacity
 </div>
 
 <script>
-// Section animations
+// Section scroll animation (appear/disappear)
 const sections = document.querySelectorAll('section');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
-}, { threshold: 0.3 });
-sections.forEach(sec => observer.observe(sec));
+const sectionObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) entry.target.classList.add('visible');
+    else entry.target.classList.remove('visible');
+  });
+}, { threshold: 0.2 });
+sections.forEach(sec => sectionObserver.observe(sec));
 
 // Newsletter logic
 const modal = document.getElementById('newsletter-modal');
@@ -96,7 +98,6 @@ function showNewsletter() {
     document.body.classList.add('blur');
   }
 }
-
 setTimeout(showNewsletter, 2000);
 
 function closeNewsletter() {
@@ -104,7 +105,6 @@ function closeNewsletter() {
   document.body.classList.remove('blur');
   localStorage.setItem('hideNewsletter','true');
 }
-
 closeBtn.onclick = closeNewsletter;
 modal.onclick = e => { if(e.target===modal) closeNewsletter(); }
 
