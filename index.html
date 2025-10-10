@@ -5,17 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>ALEXANDERBYTES</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      color: #fff;
-      background: #000;
-      overflow-x: hidden;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #fff; background: #000; overflow-x: hidden; }
     section {
       min-height: 100vh;
       padding: 60px 20px;
@@ -25,62 +16,41 @@
       flex-direction: column;
       position: relative;
     }
-    .title {
-      font-size: 3rem;
-      letter-spacing: 0.1em;
-      margin-bottom: 1rem;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.8s ease;
-    }
-    .tagline {
-      font-size: 1.4rem;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.8s ease 0.2s;
-    }
-    .btn {
-      margin-top: 2rem;
-      padding: 0.8em 2em;
-      background: #fff;
-      color: #000;
-      border: none;
-      border-radius: 4px;
-      font-size: 1rem;
-      cursor: pointer;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.8s ease 0.4s;
-    }
-    section.visible .title,
-    section.visible .tagline,
-    section.visible .btn {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .title { font-size: 3rem; letter-spacing: 0.1em; margin-bottom: 1rem; opacity: 0; transform: translateY(20px); transition: all 0.8s ease; }
+    .tagline { font-size: 1.4rem; opacity: 0; transform: translateY(20px); transition: all 0.8s ease 0.2s; }
+    .btn { margin-top: 2rem; padding: 0.8em 2em; background: #fff; color: #000; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; opacity: 0; transform: translateY(20px); transition: all 0.8s ease 0.4s; }
+    section.visible .title, section.visible .tagline, section.visible .btn { opacity: 1; transform: translateY(0); }
 
-    /* Email signup styling */
-    #subscribe {
-      padding: 80px 20px;
-      text-align: center;
+    /* Popup Modal Styling */
+    #newsletterModal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      justify-content: center; align-items: center;
+    }
+    #newsletterContent {
       background: #111;
-      color: white;
-    }
-    #subscribe h2 {
-      font-size: 2em;
-      margin-bottom: 20px;
-    }
-    #subscribe p {
-      margin-bottom: 40px;
-    }
-    #subscribe iframe {
-      display: block;
-      margin: 0 auto;
-      max-width: 100%;
+      padding: 40px 20px;
       border-radius: 12px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.3);
-      border: none;
-      height: 400px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 0 30px rgba(255,255,255,0.1);
+    }
+    #newsletterContent h2 { font-size: 2em; margin-bottom: 15px; }
+    #newsletterContent p { margin-bottom: 25px; font-size: 1rem; color: #ccc; }
+    #newsletterContent iframe { width: 100%; height: 300px; border: none; border-radius: 8px; }
+    #closeModal {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 1.5rem;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -100,24 +70,42 @@
     <button class="btn" onclick="window.open('https://artists.landr.com/FAF','_blank')">Stream Now</button>
   </section>
 
-  <!-- Email Signup Section -->
-  <section id="subscribe">
-    <h2>Stay Connected 🚀</h2>
-    <p>Get updates on new drops, projects, and behind-the-scenes content.</p>
-
-    <!-- Brevo Embed Form WITHOUT reCAPTCHA -->
-    <iframe width="540" height="305" src="https://84626b95.sibforms.com/serve/MUIFAJaDo4pOkEfzkjhnR5e7hMoa66_aV9PUJVqtYG5PVwHmUuHx3-C7tpX1fuxBlV1iM-IVlnvk8LqhSsljTbOlW9o4yEWV7H6WR4CCDiADBWCuPypJRnhf_dxLmL7ohrLvEme7Sx6lQhwwaSRiH9IwjEI_IEGpIrIruv8ElfYtTXew2mdoR_t4wS0DaV7zBwvbmOI6TJ09fDemlA==" frameborder="0" scrolling="auto" allowfullscreen style="display: block;margin-left: auto;margin-right: auto;max-width: 100%;"></iframe>
-  </section>
+  <!-- Newsletter Modal -->
+  <div id="newsletterModal">
+    <div id="newsletterContent">
+      <span id="closeModal">&times;</span>
+      <h2>Stay Connected 🚀</h2>
+      <p>Get updates on new drops, projects, and behind-the-scenes content.</p>
+      <!-- Brevo Embed Form WITHOUT reCAPTCHA -->
+      <iframe src="https://84626b95.sibforms.com/serve/MUIFAPqwJiG3XZTzPvZ8Zqt_a65sjZPFGyOj3XdS0MkrDL9maLn2_XdxyLb3aapBHhhw6-fcJg3rn3JfO_Bjczc523TQHD9vwB-irH_ynRMB3Hf8EFfzrbRcSyWr8w6FfMDODGMfiI-DE6tzjw6jIVviJN7xlEzQQxBXRd1GdoNDSN0pqPYvH9ZlB1K0tV9IImIEL4ypCQMmvUYyzA=="></iframe>
+    </div>
+  </div>
 
   <script>
     // Animate sections on scroll
     const sections = document.querySelectorAll('section');
     const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-      });
+      entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
     }, { threshold: 0.3 });
     sections.forEach(sec => observer.observe(sec));
+
+    // Popup Modal Logic
+    const modal = document.getElementById('newsletterModal');
+    const closeBtn = document.getElementById('closeModal');
+
+    // Show modal only if user hasn't seen it yet
+    if (!localStorage.getItem('newsletterShown')) {
+      setTimeout(() => { modal.style.display = 'flex'; }, 3000);
+    }
+
+    // Close modal and mark as seen
+    const closeModal = () => {
+      modal.style.display = 'none';
+      localStorage.setItem('newsletterShown', 'true');
+    };
+
+    closeBtn.onclick = closeModal;
+    window.onclick = e => { if (e.target == modal) closeModal(); };
   </script>
 
 </body>
