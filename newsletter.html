@@ -5,37 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Newsletter</title>
   <style>
-    body { 
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; 
-      margin:0; 
-      background:#111; 
-      color:#fff; 
-      display:flex; 
-      justify-content:center; 
-      align-items:center; 
-      height:100vh; 
-    }
-    #newsletter-container { 
-      padding:20px; 
-      border-radius:12px; 
-      max-width:600px; 
-      width:90%; 
-      text-align:center; 
-      background:#222;
-    }
+    body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; margin:0; background:#111; color:#fff; display:flex; justify-content:center; align-items:center; height:100vh; }
+    #newsletter-container { padding:20px; border-radius:12px; max-width:600px; width:90%; text-align:center; }
     h2 { font-size:2em; margin-bottom:10px; }
     p { margin-bottom:20px; }
     iframe { width:100%; height:300px; border-radius:8px; border:none; }
-    #dont-show { 
-      margin-top:15px; 
-      background:#555; 
-      color:#fff; 
-      border:none; 
-      padding:10px 20px; 
-      border-radius:6px; 
-      cursor:pointer; 
-      font-size:1em; 
-    }
   </style>
 </head>
 <body>
@@ -43,19 +17,6 @@
     <h2>Stay Connected 🚀</h2>
     <p>Get updates on new drops, projects, and behind-the-scenes content.</p>
     <iframe src="https://84626b95.sibforms.com/serve/MUIFAPqwJiG3XZTzPvZ8Zqt_a65sjZPFGyOj3XdS0MkrDL9maLn2_XdxyLb3aapBHhhw6-fcJg3rn3JfO_Bjczc523TQHD9vwB-irH_ynRMB3Hf8EFfzrbRcSyWr8w6FfMDODGMfiI-DE6tzjw6jIVviJN7xlEzQQxBXRd1GdoNDSN0pqPYvH9ZlB1K0tV9IImIEL4ypCQMmvUYyzA==" frameborder="0" scrolling="auto" allowfullscreen></iframe>
-    <button id="dont-show">Don't show again</button>
   </div>
-
-  <script>
-    const dontShowBtn = document.getElementById('dont-show');
-    dontShowBtn.addEventListener('click', () => {
-      // Store in localStorage so popup won't appear again
-      localStorage.setItem('hideNewsletter', 'true');
-      // Tell parent window (index.html) to close modal
-      if (window.parent) {
-        window.parent.postMessage('closeNewsletter', '*');
-      }
-    });
-  </script>
 </body>
 </html>
