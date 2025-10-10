@@ -12,7 +12,7 @@ html, body {
   scroll-behavior: smooth;
 }
 
-/* Section styling + animation */
+/* Section styling */
 section {
   min-height:100vh; padding:60px 20px;
   display:flex; align-items:center; justify-content:center;
@@ -22,11 +22,7 @@ section {
 }
 section.visible { opacity:1; transform:translateY(0); }
 
-.title {
-  font-size:3rem; letter-spacing:0.1em; margin-bottom:1rem;
-  text-shadow:0 0 8px rgba(255,255,255,0.3);
-  transition: all 0.5s ease;
-}
+.title { font-size:3rem; margin-bottom:1rem; text-shadow:0 0 8px rgba(255,255,255,0.3); }
 .title:hover { text-shadow:0 0 20px rgba(255,255,255,0.6); }
 
 .tagline { font-size:1.4rem; margin-bottom:1rem; opacity:0.8; }
@@ -43,17 +39,15 @@ section.visible { opacity:1; transform:translateY(0); }
   .btn { font-size:0.9rem; padding:0.6em 1.5em; }
 }
 
-/* Floating newsletter modal + overlay */
+/* Newsletter modal + overlay */
 #modal-overlay {
-  display:none;
-  position:fixed; top:0; left:0; width:100%; height:100%;
+  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
   background:rgba(0,0,0,0.3); backdrop-filter: blur(6px);
   z-index:998; opacity:0; transition: opacity 0.4s ease;
 }
 
 #newsletter-modal {
-  display:none;
-  position:fixed; top:50%; left:50%;
+  display:none; position:fixed; top:50%; left:50%;
   transform:translate(-50%,-50%) scale(0.8);
   background:#111; padding:20px; border-radius:16px;
   max-width:600px; width:90%; max-height:90vh; overflow-y:auto;
@@ -66,16 +60,14 @@ section.visible { opacity:1; transform:translateY(0); }
 #newsletter-modal iframe { width:100%; height:50vh; min-height:300px; max-height:500px; border-radius:10px; border:none; }
 #close-newsletter { position:absolute; top:10px; right:10px; background:none; border:none; font-size:1.5rem; color:#fff; cursor:pointer; }
 
-/* Parallax background effect */
+/* Parallax background */
 body::before {
-  content:'';
-  position:fixed; top:0; left:0; width:100%; height:100%;
+  content:''; position:fixed; top:0; left:0; width:100%; height:100%;
   background:url('https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
   z-index:-1; filter: brightness(0.2);
   transform: translateZ(0) scale(1.1);
   transition: transform 0.3s ease;
 }
-
 </style>
 </head>
 <body>
@@ -99,12 +91,11 @@ body::before {
 </div>
 
 <script>
-// Section fade-in/out on scroll
+// Fade-in sections
 const sections = document.querySelectorAll('section');
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
-    if(entry.isIntersecting) entry.target.classList.add('visible');
-    else entry.target.classList.remove('visible');
+    entry.target.classList.toggle('visible', entry.isIntersecting);
   });
 }, { threshold:0.25 });
 sections.forEach(sec => observer.observe(sec));
@@ -119,26 +110,26 @@ function showNewsletter() {
   modal.style.display='block';
   setTimeout(()=>{ modal.classList.add('show'); overlay.style.opacity='1'; },50);
 }
-setTimeout(showNewsletter, 2000);
 
 function closeNewsletter() {
   modal.classList.remove('show');
   overlay.style.opacity='0';
   setTimeout(()=>{ modal.style.display='none'; overlay.style.display='none'; },500);
 }
+
+// Show after page fully loads
+window.addEventListener('load', () => {
+  setTimeout(showNewsletter, 2000);
+});
+
+// Close events
 closeBtn.onclick = closeNewsletter;
 overlay.onclick = closeNewsletter;
 
-// Parallax scroll effect
-window.addEventListener('scroll', () => {
-  const scrolled = window.scrollY;
-  document.body.style.setProperty('--parallax', `${scrolled * 0.3}px`);
-  document.body.querySelector('::before');
-});
+// Listen for message from iframe
 window.addEventListener('message', e => {
   if(e.data==='closeNewsletter') closeNewsletter();
 });
 </script>
-
 </body>
 </html>
