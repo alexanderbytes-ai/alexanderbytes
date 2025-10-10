@@ -5,86 +5,158 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>ALEXANDERBYTES</title>
 <style>
+/* =========================
+   Base Reset & Typography
+========================= */
 html, body {
   margin:0; padding:0; height:100%;
-  font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  color:#fff; background:#000; overflow-x:hidden; scroll-behavior:smooth;
-  perspective:2500px; perspective-origin:center center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color:#fff; background:#000; overflow-x:hidden;
+  scroll-behavior: smooth; position: relative;
 }
+
 *, *::before, *::after { box-sizing:border-box; }
 
-#particle-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-3; pointer-events:none; }
+/* =========================
+   Particle Canvas
+========================= */
+#particle-canvas {
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  z-index:-3; pointer-events:none;
+}
 
+/* =========================
+   Background Layers
+========================= */
 body::before {
   content:''; position:fixed; top:0; left:0; width:100%; height:100%;
   background:url('https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
-  filter:brightness(0.12) blur(2px); z-index:-2; transform:translateZ(-400px) scale(1.05);
-  transition: transform 0.6s ease;
+  filter: brightness(0.12) blur(2px);
+  z-index:-2; transform:scale(1.05);
+  transition: transform 0.5s ease;
 }
+
 body::after {
   content:''; position:fixed; top:0; left:0; width:100%; height:100%;
   background:radial-gradient(circle at 50% 30%, rgba(255,255,255,0.05), rgba(0,0,0,0.85));
   z-index:-1;
 }
 
+/* =========================
+   Sections & Fade-In
+========================= */
 section {
   min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
-  padding:60px 20px; text-align:center; opacity:0;
-  transform:translateY(80px) translateZ(0);
-  transition: all 1s cubic-bezier(0.65,0,0.35,1); transform-style: preserve-3d; will-change: transform, opacity; position:relative;
+  padding:60px 20px; text-align:center;
+  opacity:0; transform:translateY(80px);
+  transition: all 1s cubic-bezier(0.65,0,0.35,1);
 }
-section.visible { opacity:1; transform:translateY(0) translateZ(0); }
+section.visible { opacity:1; transform:translateY(0); }
 
+/* =========================
+   Titles & Taglines
+========================= */
 .title {
-  font-size:4rem; font-weight:700; letter-spacing:0.08em; margin-bottom:0.5rem;
-  text-shadow:0 0 20px rgba(255,255,255,0.25); transition: transform 0.35s ease, text-shadow 0.35s ease;
+  font-size:4rem; font-weight:700; letter-spacing:0.08em;
+  margin-bottom:0.5rem; text-shadow:0 0 20px rgba(255,255,255,0.25);
+  transition: all 0.35s ease, transform 0.35s ease;
 }
-.title:hover { transform:scale(1.05) rotateY(3deg) rotateX(1deg); text-shadow:0 0 40px rgba(255,255,255,0.45); }
+.title:hover { transform:scale(1.05) rotateZ(-0.5deg); text-shadow:0 0 40px rgba(255,255,255,0.45); }
 
-.tagline { font-size:1.6rem; margin-bottom:2rem; opacity:0.85; letter-spacing:0.02em; }
+.tagline {
+  font-size:1.6rem; margin-bottom:2rem; opacity:0.85; letter-spacing:0.02em;
+}
 
+/* =========================
+   Buttons
+========================= */
 .btn {
   padding:1em 3em; background:rgba(255,255,255,0.15); backdrop-filter:blur(14px);
   color:#fff; border:1px solid rgba(255,255,255,0.3); border-radius:24px;
   cursor:pointer; font-size:1.2rem; font-weight:500;
-  transition: all 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease; transform-style: preserve-3d;
+  transition: all 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
 }
-.btn:hover { background:rgba(255,255,255,0.35); transform:translateY(-4px) scale(1.08) rotateX(2deg) rotateY(-1deg); box-shadow:0 20px 40px rgba(255,255,255,0.18); }
+.btn:hover {
+  background:rgba(255,255,255,0.35);
+  transform:translateY(-4px) scale(1.08) rotateZ(-1deg);
+  box-shadow:0 20px 40px rgba(255,255,255,0.18);
+}
 
-@media (max-width:1024px){ .title{font-size:3rem;} .tagline{font-size:1.3rem;} .btn{font-size:1.05rem; padding:0.9em 2.5em;} }
-@media (max-width:768px){ .title{font-size:2.4rem;} .tagline{font-size:1.1rem;} .btn{font-size:1rem; padding:0.8em 2em;} }
+/* =========================
+   Responsive
+========================= */
+@media (max-width:1024px) {
+  .title { font-size:3rem; }
+  .tagline { font-size:1.3rem; }
+  .btn { font-size:1.05rem; padding:0.9em 2.5em; }
+}
+@media (max-width:768px) {
+  .title { font-size:2.4rem; }
+  .tagline { font-size:1.1rem; }
+  .btn { font-size:1rem; padding:0.8em 2em; }
+}
 
-#modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); backdrop-filter: blur(6px); z-index:998; opacity:0; transition: opacity 0.4s ease; }
+/* =========================
+   Newsletter Modal
+========================= */
+#modal-overlay {
+  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.55); backdrop-filter: blur(6px);
+  z-index:998; opacity:0; transition: opacity 0.4s ease;
+}
+
 #newsletter-modal {
   display:none; position:fixed; top:50%; left:50%;
   transform:translate(-50%,-50%) scale(0.7);
-  background:rgba(20,20,20,0.95); padding:40px; border-radius:28px;
-  width:90%; max-width:620px; max-height:90vh; overflow-y:auto;
+  background:rgba(20,20,20,0.95); padding:40px;
+  border-radius:28px; width:90%; max-width:620px; max-height:90vh; overflow-y:auto;
   box-shadow:0 50px 100px rgba(0,0,0,0.8), 0 0 60px rgba(255,255,255,0.05);
-  text-align:center; z-index:999; opacity:0; transition: all 0.7s cubic-bezier(0.65,0,0.35,1);
+  text-align:center; z-index:999; opacity:0;
+  transition: all 0.7s cubic-bezier(0.65,0,0.35,1);
 }
 #newsletter-modal.show { transform:translate(-50%,-50%) scale(1); opacity:1; }
 #newsletter-modal.animate { animation: modalBounce 0.7s cubic-bezier(0.65,0,0.35,1) forwards; }
-@keyframes modalBounce {0%{transform:translate(-50%,-60%) scale(0.7);opacity:0;} 60%{transform:translate(-50%,-48%) scale(1.05);opacity:1;} 80%{transform:translate(-50%,-50%) scale(0.97);} 100%{transform:translate(-50%,-50%) scale(1);}}
 
-#newsletter-modal iframe { width:100%; height:55vh; min-height:350px; border-radius:16px; border:none; }
-#close-newsletter { position:absolute; top:15px; right:15px; background:none; border:none; font-size:2rem; color:#fff; cursor:pointer; transition: all 0.25s ease; }
+@keyframes modalBounce {
+  0% { transform: translate(-50%,-60%) scale(0.7); opacity:0; }
+  60% { transform: translate(-50%,-48%) scale(1.05); opacity:1; }
+  80% { transform: translate(-50%,-50%) scale(0.97); }
+  100% { transform: translate(-50%,-50%) scale(1); }
+}
+
+#newsletter-modal iframe {
+  width:100%; height:55vh; min-height:350px; border-radius:16px; border:none;
+}
+#close-newsletter {
+  position:absolute; top:15px; right:15px;
+  background:none; border:none; font-size:2rem; color:#fff; cursor:pointer;
+  transition: all 0.25s ease;
+}
 #close-newsletter:hover { transform:scale(1.3); color:#f0f0f0; }
 
-section::after { content:'⌄'; font-size:2rem; opacity:0.4; margin-top:20px; display:block; animation:bounceDown 1.6s infinite; }
-@keyframes bounceDown {0%,100%{transform:translateY(0);}50%{transform:translateY(10px);}}
+/* =========================
+   Smooth Scroll Cue
+========================= */
+section::after {
+  content:'⌄'; font-size:2rem; opacity:0.4; margin-top:20px; display:block;
+  animation: bounceDown 1.6s infinite;
+}
+@keyframes bounceDown {
+  0%, 100% { transform:translateY(0); }
+  50% { transform:translateY(10px); }
+}
 </style>
 </head>
 <body>
 <canvas id="particle-canvas"></canvas>
 
-<section id="hercules" data-depth="0.2" data-particle-layer="1">
+<section id="hercules">
   <div class="title">HERCULES</div>
   <div class="tagline">Music</div>
   <button class="btn" onclick="window.open('https://artists.landr.com/hercules','_blank')">Stream Now</button>
 </section>
 
-<section id="faf" data-depth="0.4" data-particle-layer="2">
+<section id="faf">
   <div class="title">FAF</div>
   <div class="tagline">Music</div>
   <button class="btn" onclick="window.open('https://artists.landr.com/FAF','_blank')">Stream Now</button>
@@ -93,46 +165,63 @@ section::after { content:'⌄'; font-size:2rem; opacity:0.4; margin-top:20px; di
 <div id="modal-overlay"></div>
 <div id="newsletter-modal">
   <button id="close-newsletter">&times;</button>
-  <iframe src="newsletter.html" frameborder="0" scrolling="auto"></iframe>
+  <iframe src="https://84626b95.sibforms.com/serve/MUIFAEZRMA9XI6yp5-9I_5gXKQI4DUUT0vXVwDmhMCEwdyVXT7qPTG5hdkNXkb_eL_IAKLdNmNVPQSzKzhUw2AQmsk4STpAoxIMkD-2R4YolSsP5Jk0T0Bvh2ilSGzA7UAOQPtwjGubdQauk6vy_llAXLEMzgv8Q2b0-p3XOryayZK6e7IFN4WfXLP1DxyMEcEDQ9FM7RZvMSw3SHQ==" frameborder="0" scrolling="auto"></iframe>
 </div>
 
 <script>
-// Section fade in
-const sections=document.querySelectorAll('section');
-const observer=new IntersectionObserver(entries=>{entries.forEach(e=>e.target.classList.toggle('visible',e.isIntersecting));},{threshold:0.25});
-sections.forEach(sec=>observer.observe(sec));
+// =========================
+// Section Fade-In
+// =========================
+const sections = document.querySelectorAll('section');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => entry.target.classList.toggle('visible', entry.isIntersecting));
+}, { threshold:0.25 });
+sections.forEach(sec => observer.observe(sec));
 
-// Newsletter modal
-const modal=document.getElementById('newsletter-modal'), overlay=document.getElementById('modal-overlay'), closeBtn=document.getElementById('close-newsletter');
-function showNewsletter(){ overlay.style.display='block'; modal.style.display='block'; setTimeout(()=>{ modal.classList.add('show','animate'); overlay.style.opacity='1'; },50);}
-function closeNewsletter(){ modal.classList.remove('show','animate'); overlay.style.opacity='0'; setTimeout(()=>{ modal.style.display='none'; overlay.style.display='none'; },500);}
-window.addEventListener('load',()=>setTimeout(showNewsletter,2000));
-closeBtn.onclick=overlay.onclick=closeNewsletter;
-window.addEventListener('message', e=>{if(e.data==='closeNewsletter') closeNewsletter();});
+// =========================
+// Newsletter Modal
+// =========================
+const modal = document.getElementById('newsletter-modal');
+const overlay = document.getElementById('modal-overlay');
+const closeBtn = document.getElementById('close-newsletter');
 
-// Particle system with depth-of-field
-const canvas=document.getElementById('particle-canvas'), ctx=canvas.getContext('2d');
-let particles=[], width=canvas.width=window.innerWidth, height=canvas.height=window.innerHeight;
-const particleCount=300; let mouseX=0, mouseY=0;
-
-class Particle{constructor(layer){this.layer=layer||1;this.reset();}
-reset(){this.x=Math.random()*width; this.y=Math.random()*height; this.z=Math.random()*1000; this.size=Math.random()*2+1; this.speed=Math.random()*0.4+0.1;}
-update(scrollOffset){const depthFactor=(this.z/1000)*this.layer; const blurFactor=(1-this.z/1000)*2; 
-this.x+=Math.cos(this.z)*this.speed + (mouseX-width/2)*0.0005*depthFactor; 
-this.y+=Math.sin(this.z)*this.speed + (mouseY-height/2)*0.0005*depthFactor + scrollOffset*depthFactor; 
-if(this.x<0||this.x>width||this.y<0||this.y>height) this.reset(); 
-this.blur=blurFactor;}
-draw(){ctx.fillStyle=`rgba(255,255,255,${0.08 + this.z/2000})`; ctx.filter=`blur(${this.blur}px)`; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); ctx.filter='none';}
+function showNewsletter() {
+  overlay.style.display='block';
+  modal.style.display='block';
+  setTimeout(()=>{ modal.classList.add('show','animate'); overlay.style.opacity='1'; },50);
+}
+function closeNewsletter() {
+  modal.classList.remove('show','animate');
+  overlay.style.opacity='0';
+  setTimeout(()=>{ modal.style.display='none'; overlay.style.display='none'; },500);
 }
 
-function initParticles(){ particles=[]; sections.forEach(sec=>{const layer=parseFloat(sec.dataset.particleLayer)||1; for(let i=0;i<Math.floor(particleCount*layer/2);i++) particles.push(new Particle(layer));}); }
-function animateParticles(){ const scrollOffset=window.scrollY*0.3; ctx.clearRect(0,0,width,height); particles.forEach(p=>{p.update(scrollOffset);p.draw();}); requestAnimationFrame(animateParticles);}
-window.addEventListener('resize',()=>{width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; initParticles();});
-window.addEventListener('mousemove', e=>{ mouseX=e.clientX; mouseY=e.clientY; });
-initParticles(); animateParticles();
+window.addEventListener('load', ()=>setTimeout(showNewsletter,2000));
+closeBtn.onclick = overlay.onclick = closeNewsletter;
+window.addEventListener('message', e => { if(e.data==='closeNewsletter') closeNewsletter(); });
 
-// Section warp
-window.addEventListener('scroll',()=>{ const scrollY=window.scrollY; sections.forEach(sec=>{ const depth=parseFloat(sec.dataset.depth)||0; const warp=Math.sin(scrollY/300)*50; sec.style.transform=`translateY(${scrollY*depth - warp}px) translateZ(0)`;}); });
+// =========================
+// Particle System
+// =========================
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let particles=[], width=canvas.width=window.innerWidth, height=canvas.height=window.innerHeight;
+const particleCount = 90;
+
+class Particle {
+  constructor(){ this.reset(); }
+  reset(){ this.x=Math.random()*width; this.y=Math.random()*height; this.size=Math.random()*2+1; this.speed=Math.random()*0.4+0.1; this.angle=Math.random()*2*Math.PI; }
+  update(){ this.x+=Math.cos(this.angle)*this.speed; this.y+=Math.sin(this.angle)*this.speed; if(this.x<0||this.x>width||this.y<0||this.y>height) this.reset(); }
+  draw(){ ctx.fillStyle="rgba(255,255,255,0.08)"; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); }
+}
+
+function initParticles(){ particles=[]; for(let i=0;i<particleCount;i++) particles.push(new Particle()); }
+function animateParticles(){ ctx.clearRect(0,0,width,height); particles.forEach(p=>{ p.update(); p.draw(); }); requestAnimationFrame(animateParticles); }
+
+window.addEventListener('resize', ()=>{ width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; initParticles(); });
+
+initParticles();
+animateParticles();
 </script>
 </body>
 </html>
