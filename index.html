@@ -5,82 +5,110 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>ALEXANDERBYTES</title>
 <style>
+/* Reset + base */
 html, body {
   margin:0; padding:0; height:100%;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color:#fff; background:#000; overflow-x:hidden;
   scroll-behavior: smooth;
 }
 
-/* Section styling */
+/* Background with subtle parallax */
+body::before {
+  content:'';
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  background:url('https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+  filter: brightness(0.15) blur(1.5px);
+  z-index:-2; transform:scale(1.05);
+  transition: transform 0.5s ease;
+}
+
+/* Overlay gradient for depth */
+body::after {
+  content:'';
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  background:linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.8));
+  z-index:-1;
+}
+
+/* Section fade-in */
 section {
-  min-height:100vh; padding:60px 20px;
-  display:flex; align-items:center; justify-content:center;
-  flex-direction:column; text-align:center;
-  opacity:0; transform:translateY(50px);
-  transition: all 0.8s cubic-bezier(0.68,-0.55,0.265,1.55);
+  min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
+  padding:60px 20px; text-align:center;
+  opacity:0; transform:translateY(60px);
+  transition: all 1s cubic-bezier(0.65,0,0.35,1);
 }
 section.visible { opacity:1; transform:translateY(0); }
 
-.title { font-size:3rem; margin-bottom:1rem; text-shadow:0 0 8px rgba(255,255,255,0.3); }
-.title:hover { text-shadow:0 0 20px rgba(255,255,255,0.6); }
-
-.tagline { font-size:1.4rem; margin-bottom:1rem; opacity:0.8; }
-.btn {
-  padding:0.8em 2em; background:#fff; color:#000;
-  border:none; border-radius:6px; cursor:pointer; font-size:1rem;
-  transition: all 0.3s ease, transform 0.3s ease;
+/* Titles */
+.title {
+  font-size:3.2rem; letter-spacing:0.08em;
+  margin-bottom:0.5rem; font-weight:600;
+  text-shadow:0 0 12px rgba(255,255,255,0.25);
+  transition: all 0.3s ease;
 }
-.btn:hover { transform: translateY(-3px) scale(1.05); box-shadow:0 10px 20px rgba(255,255,255,0.2); }
+.title:hover { text-shadow:0 0 25px rgba(255,255,255,0.5); transform:scale(1.02); }
+
+.tagline { font-size:1.5rem; margin-bottom:2rem; opacity:0.85; letter-spacing:0.02em; }
+
+.btn {
+  padding:0.9em 2.2em; background:rgba(255,255,255,0.15); backdrop-filter:blur(10px);
+  color:#fff; border:1px solid rgba(255,255,255,0.3); border-radius:14px;
+  cursor:pointer; font-size:1.05rem; font-weight:500;
+  transition: all 0.35s ease, transform 0.35s ease;
+}
+.btn:hover {
+  background:rgba(255,255,255,0.3); transform:translateY(-3px) scale(1.05);
+  box-shadow:0 12px 24px rgba(255,255,255,0.15);
+}
 
 @media (max-width:768px) {
-  .title { font-size:2rem; }
-  .tagline { font-size:1rem; }
-  .btn { font-size:0.9rem; padding:0.6em 1.5em; }
+  .title { font-size:2.2rem; }
+  .tagline { font-size:1.1rem; }
+  .btn { font-size:0.95rem; padding:0.7em 1.8em; }
 }
 
-/* Newsletter modal + overlay */
+/* Newsletter modal */
 #modal-overlay {
   display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-  background:rgba(0,0,0,0.3); backdrop-filter: blur(6px);
+  background:rgba(0,0,0,0.4); backdrop-filter: blur(4px);
   z-index:998; opacity:0; transition: opacity 0.4s ease;
 }
 
 #newsletter-modal {
   display:none; position:fixed; top:50%; left:50%;
-  transform:translate(-50%,-50%) scale(0.8);
-  background:#111; padding:20px; border-radius:16px;
-  max-width:600px; width:90%; max-height:90vh; overflow-y:auto;
-  text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.5);
-  z-index:999; opacity:0;
-  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
+  transform:translate(-50%,-50%) scale(0.85);
+  background:rgba(20,20,20,0.95); padding:30px;
+  border-radius:24px; width:90%; max-width:600px; max-height:90vh;
+  overflow-y:auto; box-shadow:0 30px 60px rgba(0,0,0,0.6);
+  text-align:center; z-index:999; opacity:0;
+  transition: all 0.6s cubic-bezier(0.65,0,0.35,1);
 }
 #newsletter-modal.show { transform:translate(-50%,-50%) scale(1); opacity:1; }
 
-#newsletter-modal iframe { width:100%; height:50vh; min-height:300px; max-height:500px; border-radius:10px; border:none; }
-#close-newsletter { position:absolute; top:10px; right:10px; background:none; border:none; font-size:1.5rem; color:#fff; cursor:pointer; }
+#newsletter-modal iframe { width:100%; height:50vh; min-height:320px; border-radius:12px; border:none; }
 
-/* Parallax background */
-body::before {
-  content:''; position:fixed; top:0; left:0; width:100%; height:100%;
-  background:url('https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
-  z-index:-1; filter: brightness(0.2);
-  transform: translateZ(0) scale(1.1);
-  transition: transform 0.3s ease;
+#close-newsletter {
+  position:absolute; top:15px; right:15px;
+  background:none; border:none; font-size:1.6rem; color:#fff; cursor:pointer;
+  transition: all 0.2s ease;
 }
+#close-newsletter:hover { transform:scale(1.2); color:#f0f0f0; }
+
+/* Smooth scroll for parallax effect */
 </style>
 </head>
 <body>
 
 <section id="hercules">
   <div class="title">HERCULES</div>
-  <div class="tagline">Music</div>
+  <div class="tagline">Music Experience</div>
   <button class="btn" onclick="window.open('https://artists.landr.com/hercules','_blank')">Stream Now</button>
 </section>
 
 <section id="faf">
   <div class="title">FAF</div>
-  <div class="tagline">Music</div>
+  <div class="tagline">Music Experience</div>
   <button class="btn" onclick="window.open('https://artists.landr.com/FAF','_blank')">Stream Now</button>
 </section>
 
@@ -117,12 +145,9 @@ function closeNewsletter() {
   setTimeout(()=>{ modal.style.display='none'; overlay.style.display='none'; },500);
 }
 
-// Show after page fully loads
-window.addEventListener('load', () => {
-  setTimeout(showNewsletter, 2000);
-});
+// Show modal after load
+window.addEventListener('load', () => { setTimeout(showNewsletter, 2000); });
 
-// Close events
 closeBtn.onclick = closeNewsletter;
 overlay.onclick = closeNewsletter;
 
