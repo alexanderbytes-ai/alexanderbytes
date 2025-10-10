@@ -5,26 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 <title>ALEXANDERBYTES</title>
 <style>
+/* Reset & Base */
 * { margin:0; padding:0; box-sizing:border-box; }
-html, body { 
-  height:100%; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-  color:#fff; background:#000; overflow-x:hidden; scroll-behavior:smooth; 
-  perspective:1000px;
+html, body {
+  height:100%; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color:#fff; background:#000; overflow-x:hidden;
+  scroll-behavior:smooth; position:relative;
 }
 
-/* Particle Canvas */
+/* Particle canvas */
 #particle-canvas {
   position:fixed; top:0; left:0; width:100%; height:100%;
   z-index:-3; pointer-events:none;
 }
 
-/* Parallax Background */
+/* Background Layers */
 body::before {
   content:''; position:fixed; top:0; left:0; width:100%; height:100%;
   background:url('https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
   filter: brightness(0.15) blur(1.8px);
   z-index:-2; transform:scale(1.05);
-  transition: transform 0.8s ease;
+  transition: transform 0.5s ease;
 }
 body::after {
   content:''; position:fixed; top:0; left:0; width:100%; height:100%;
@@ -32,7 +33,7 @@ body::after {
   z-index:-1;
 }
 
-/* Sections */
+/* Section Fade-In */
 section {
   min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
   padding:60px 20px; text-align:center;
@@ -41,17 +42,166 @@ section {
 }
 section.visible { opacity:1; transform:translateY(0); }
 
-/* Titles & Buttons */
-.title { font-size:3.5rem; font-weight:600; letter-spacing:0.08em; margin-bottom:0.5rem; text-shadow:0 0 15px rgba(255,255,255,0.25); transition: all 0.35s ease;}
-.title:hover { transform:scale(1.03); text-shadow:0 0 35px rgba(255,255,255,0.45);}
-.tagline { font-size:1.6rem; margin-bottom:2rem; opacity:0.85; letter-spacing:0.02em;}
-.btn { padding:1em 2.5em; background:rgba(255,255,255,0.15); backdrop-filter:blur(12px); color:#fff; border:1px solid rgba(255,255,255,0.3); border-radius:18px; cursor:pointer; font-size:1.1rem; font-weight:500; transition: all 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;}
-.btn:hover { background:rgba(255,255,255,0.3); transform:translateY(-3px) scale(1.06); box-shadow:0 16px 32px rgba(255,255,255,0.15);}
+/* Titles */
+.title {
+  font-size:3.5rem; font-weight:600; letter-spacing:0.08em;
+  margin-bottom:0.5rem;
+  text-shadow:0 0 15px rgba(255,255,255,0.25);
+  transition: all 0.35s ease;
+}
+.title:hover { transform:scale(1.03); text-shadow:0 0 35px rgba(255,255,255,0.45); }
 
-/* Modal */
-#modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.55); backdrop-filter: blur(6px); z-index:998; opacity:0; transition: opacity 0.4s ease;}
-#newsletter-modal { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0.8); background:rgba(25,25,25,0.95); padding:30px; border-radius:28px; width:90%; max-width:650px; max-height:90vh; overflow-y:auto; text-align:center; z-index:999; opacity:0; transition: all 0.7s cubic-bezier(0.65,0,0.35,1);}
+.tagline {
+  font-size:1.6rem; margin-bottom:2rem; opacity:0.85; letter-spacing:0.02em;
+}
+
+/* Buttons */
+.btn {
+  padding:1em 2.5em; background:rgba(255,255,255,0.15); backdrop-filter:blur(12px);
+  color:#fff; border:1px solid rgba(255,255,255,0.3); border-radius:18px;
+  cursor:pointer; font-size:1.1rem; font-weight:500;
+  transition: all 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+.btn:hover {
+  background:rgba(255,255,255,0.3);
+  transform:translateY(-3px) scale(1.06);
+  box-shadow:0 16px 32px rgba(255,255,255,0.15);
+}
+
+@media (max-width:1024px){
+  .title { font-size:2.8rem; }
+  .tagline { font-size:1.4rem; }
+  .btn { font-size:1rem; padding:0.85em 2em; }
+}
+@media (max-width:768px){
+  .title { font-size:2.2rem; }
+  .tagline { font-size:1.2rem; }
+  .btn { font-size:0.95rem; padding:0.75em 1.8em; }
+}
+
+/* Newsletter Modal */
+#modal-overlay {
+  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.55); backdrop-filter: blur(6px);
+  z-index:998; opacity:0; transition: opacity 0.4s ease;
+}
+#newsletter-modal {
+  display:none; position:fixed; top:50%; left:50%;
+  transform:translate(-50%,-50%) scale(0.8);
+  background:rgba(25,25,25,0.95); padding:30px;
+  border-radius:28px; width:90%; max-width:650px; max-height:90vh; overflow-y:auto;
+  box-shadow:0 50px 100px rgba(0,0,0,0.8), 0 0 60px rgba(255,255,255,0.05);
+  text-align:center; z-index:999; opacity:0;
+  transition: all 0.7s cubic-bezier(0.65,0,0.35,1);
+}
 #newsletter-modal.show { transform:translate(-50%,-50%) scale(1); opacity:1; }
-#newsletter-modal.animate { animation: modalBounce 0.7s cubic-bezier(0.65,0,0.35,1) forwards;}
-@keyframes modalBounce { 0% { transform: translate(-50%,-60%) scale(0.8); opacity:0; } 60% { transform: translate(-50%,-48%) scale(1.05); opacity:1; } 80% { transform: translate(-50%,-50%) scale(0.97); } 100% { transform: translate(-50%,-50%) scale(1); } }
-#newsletter-modal iframe { width:100%; height:55vh; min-height:350px;
+#newsletter-modal.animate { animation: modalBounce 0.7s cubic-bezier(0.65,0,0.35,1) forwards; }
+@keyframes modalBounce {
+  0% { transform: translate(-50%,-60%) scale(0.8); opacity:0; }
+  60% { transform: translate(-50%,-48%) scale(1.05); opacity:1; }
+  80% { transform: translate(-50%,-50%) scale(0.97); }
+  100% { transform: translate(-50%,-50%) scale(1); }
+}
+
+#newsletter-modal iframe {
+  width:100%; height:55vh; min-height:350px; max-height:70vh;
+  border-radius:16px; border:none;
+}
+#close-newsletter {
+  position:absolute; top:15px; right:15px;
+  background:none; border:none; font-size:1.8rem; color:#fff; cursor:pointer;
+  transition: transform 0.2s ease;
+}
+#close-newsletter:hover { transform:scale(1.25); color:#f0f0f0; }
+</style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+
+<section id="hercules">
+  <div class="title">HERCULES</div>
+  <div class="tagline">Music</div>
+  <button class="btn" onclick="window.open('https://artists.landr.com/hercules','_blank')">Stream Now</button>
+</section>
+
+<section id="faf">
+  <div class="title">FAF</div>
+  <div class="tagline">Music</div>
+  <button class="btn" onclick="window.open('https://artists.landr.com/FAF','_blank')">Stream Now</button>
+</section>
+
+<div id="modal-overlay"></div>
+<div id="newsletter-modal">
+  <button id="close-newsletter">&times;</button>
+  <!-- NEW Bravo Iframe -->
+  <iframe src="https://84626b95.sibforms.com/serve/MUIFAEZRMA9XI6yp5-9I_5gXKQI4DUUT0vXVwDmhMCEwdyVXT7qPTG5hdkNXkb_eL_IAKLdNmNVPQSzKzhUw2AQmsk4STpAoxIMkD-2R4YolSsP5Jk0T0Bvh2ilSGzA7UAOQPtwjGubdQauk6vy_llAXLEMzgv8Q2b0-p3XOryayZK6e7IFN4WfXLP1DxyMEcEDQ9FM7RZvMSw3SHQ==" allowfullscreen scrolling="auto"></iframe>
+</div>
+
+<script>
+// Intersection Fade-In
+const sections = document.querySelectorAll('section');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => entry.target.classList.toggle('visible', entry.isIntersecting));
+}, { threshold:0.25 });
+sections.forEach(sec => observer.observe(sec));
+
+// Newsletter modal
+const modal = document.getElementById('newsletter-modal');
+const overlay = document.getElementById('modal-overlay');
+const closeBtn = document.getElementById('close-newsletter');
+
+function showNewsletter() {
+  overlay.style.display='block';
+  modal.style.display='block';
+  setTimeout(()=>{ modal.classList.add('show','animate'); overlay.style.opacity='1'; },50);
+}
+function closeNewsletter() {
+  modal.classList.remove('show','animate');
+  overlay.style.opacity='0';
+  setTimeout(()=>{ modal.style.display='none'; overlay.style.display='none'; },500);
+}
+
+window.addEventListener('load', ()=>setTimeout(showNewsletter,2000));
+closeBtn.onclick = overlay.onclick = closeNewsletter;
+window.addEventListener('message', e => { if(e.data==='closeNewsletter') closeNewsletter(); });
+
+// Particle System
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let width = canvas.width = window.innerWidth;
+let height = canvas.height = window.innerHeight;
+const particleCount = 80;
+let particles = [];
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x=Math.random()*width;
+    this.y=Math.random()*height;
+    this.size=Math.random()*2+1;
+    this.speed=Math.random()*0.3+0.1;
+    this.angle=Math.random()*2*Math.PI;
+  }
+  update() {
+    this.x+=Math.cos(this.angle)*this.speed;
+    this.y+=Math.sin(this.angle)*this.speed;
+    if(this.x<0||this.x>width||this.y<0||this.y>height) this.reset();
+  }
+  draw() {
+    ctx.fillStyle="rgba(255,255,255,0.08)";
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+    ctx.fill();
+  }
+}
+
+function initParticles(){ particles=[]; for(let i=0;i<particleCount;i++) particles.push(new Particle()); }
+function animateParticles(){ ctx.clearRect(0,0,width,height); particles.forEach(p=>{ p.update(); p.draw(); }); requestAnimationFrame(animateParticles); }
+
+window.addEventListener('resize', ()=>{ width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; initParticles(); });
+
+initParticles();
+animateParticles();
+</script>
+</body>
+</html>
