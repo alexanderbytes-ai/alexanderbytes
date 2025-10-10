@@ -10,9 +10,9 @@
 ========================= */
 html, body {
   margin:0; padding:0; height:100%;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color:#fff; background:#000; overflow-x:hidden;
-  scroll-behavior: smooth; position: relative;
+  scroll-behavior:smooth; position: relative;
 }
 
 *, *::before, *::after { box-sizing:border-box; }
@@ -35,7 +35,6 @@ body::before {
   z-index:-2; transform:scale(1.05);
   transition: transform 0.5s ease;
 }
-
 body::after {
   content:''; position:fixed; top:0; left:0; width:100%; height:100%;
   background:radial-gradient(circle at 50% 30%, rgba(255,255,255,0.05), rgba(0,0,0,0.85));
@@ -165,7 +164,7 @@ section::after {
 <div id="modal-overlay"></div>
 <div id="newsletter-modal">
   <button id="close-newsletter">&times;</button>
-  <iframe src="https://84626b95.sibforms.com/serve/MUIFAEZRMA9XI6yp5-9I_5gXKQI4DUUT0vXVwDmhMCEwdyVXT7qPTG5hdkNXkb_eL_IAKLdNmNVPQSzKzhUw2AQmsk4STpAoxIMkD-2R4YolSsP5Jk0T0Bvh2ilSGzA7UAOQPtwjGubdQauk6vy_llAXLEMzgv8Q2b0-p3XOryayZK6e7IFN4WfXLP1DxyMEcEDQ9FM7RZvMSw3SHQ==" frameborder="0" scrolling="auto"></iframe>
+  <iframe src="newsletter.html" frameborder="0" scrolling="auto"></iframe>
 </div>
 
 <script>
@@ -188,12 +187,18 @@ const closeBtn = document.getElementById('close-newsletter');
 function showNewsletter() {
   overlay.style.display='block';
   modal.style.display='block';
-  setTimeout(()=>{ modal.classList.add('show','animate'); overlay.style.opacity='1'; },50);
+  setTimeout(()=>{
+    modal.classList.add('show','animate');
+    overlay.style.opacity='1';
+  },50);
 }
 function closeNewsletter() {
   modal.classList.remove('show','animate');
   overlay.style.opacity='0';
-  setTimeout(()=>{ modal.style.display='none'; overlay.style.display='none'; },500);
+  setTimeout(()=>{
+    modal.style.display='none';
+    overlay.style.display='none';
+  },500);
 }
 
 window.addEventListener('load', ()=>setTimeout(showNewsletter,2000));
