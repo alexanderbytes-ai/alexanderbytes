@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>ALEXANDERBYTES</title>
 <style>
-/* Reset & Base */
-* { margin:0; padding:0; box-sizing:border-box; }
+/* Base Reset */
 html, body {
-  height:100%; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin:0; padding:0; height:100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color:#fff; background:#000; overflow-x:hidden;
-  scroll-behavior:smooth; position:relative;
+  scroll-behavior: smooth;
+  position: relative;
 }
 
 /* Particle canvas */
@@ -19,7 +20,7 @@ html, body {
   z-index:-3; pointer-events:none;
 }
 
-/* Background Layers */
+/* Parallax background + ambient glow */
 body::before {
   content:''; position:fixed; top:0; left:0; width:100%; height:100%;
   background:url('https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
@@ -33,7 +34,7 @@ body::after {
   z-index:-1;
 }
 
-/* Section Fade-In */
+/* Section fade-in */
 section {
   min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;
   padding:60px 20px; text-align:center;
@@ -68,28 +69,24 @@ section.visible { opacity:1; transform:translateY(0); }
   box-shadow:0 16px 32px rgba(255,255,255,0.15);
 }
 
-@media (max-width:1024px){
-  .title { font-size:2.8rem; }
-  .tagline { font-size:1.4rem; }
-  .btn { font-size:1rem; padding:0.85em 2em; }
-}
-@media (max-width:768px){
-  .title { font-size:2.2rem; }
+@media (max-width:768px) {
+  .title { font-size:2.4rem; }
   .tagline { font-size:1.2rem; }
-  .btn { font-size:0.95rem; padding:0.75em 1.8em; }
+  .btn { font-size:1rem; padding:0.8em 2em; }
 }
 
-/* Newsletter Modal */
+/* Newsletter Modal + ambient glow */
 #modal-overlay {
   display:none; position:fixed; top:0; left:0; width:100%; height:100%;
   background:rgba(0,0,0,0.55); backdrop-filter: blur(6px);
   z-index:998; opacity:0; transition: opacity 0.4s ease;
 }
+
 #newsletter-modal {
   display:none; position:fixed; top:50%; left:50%;
-  transform:translate(-50%,-50%) scale(0.8);
-  background:rgba(25,25,25,0.95); padding:30px;
-  border-radius:28px; width:90%; max-width:650px; max-height:90vh; overflow-y:auto;
+  transform:translate(-50%,-50%) scale(0.7);
+  background:rgba(25,25,25,0.95); padding:40px;
+  border-radius:28px; width:90%; max-width:620px; max-height:90vh; overflow-y:auto;
   box-shadow:0 50px 100px rgba(0,0,0,0.8), 0 0 60px rgba(255,255,255,0.05);
   text-align:center; z-index:999; opacity:0;
   transition: all 0.7s cubic-bezier(0.65,0,0.35,1);
@@ -97,20 +94,17 @@ section.visible { opacity:1; transform:translateY(0); }
 #newsletter-modal.show { transform:translate(-50%,-50%) scale(1); opacity:1; }
 #newsletter-modal.animate { animation: modalBounce 0.7s cubic-bezier(0.65,0,0.35,1) forwards; }
 @keyframes modalBounce {
-  0% { transform: translate(-50%,-60%) scale(0.8); opacity:0; }
+  0% { transform: translate(-50%,-60%) scale(0.7); opacity:0; }
   60% { transform: translate(-50%,-48%) scale(1.05); opacity:1; }
   80% { transform: translate(-50%,-50%) scale(0.97); }
   100% { transform: translate(-50%,-50%) scale(1); }
 }
 
-#newsletter-modal iframe {
-  width:100%; height:55vh; min-height:350px; max-height:70vh;
-  border-radius:16px; border:none;
-}
+#newsletter-modal iframe { width:100%; height:55vh; min-height:350px; border-radius:14px; border:none; }
 #close-newsletter {
   position:absolute; top:15px; right:15px;
   background:none; border:none; font-size:1.8rem; color:#fff; cursor:pointer;
-  transition: transform 0.2s ease;
+  transition: all 0.2s ease;
 }
 #close-newsletter:hover { transform:scale(1.25); color:#f0f0f0; }
 </style>
@@ -133,16 +127,15 @@ section.visible { opacity:1; transform:translateY(0); }
 <div id="modal-overlay"></div>
 <div id="newsletter-modal">
   <button id="close-newsletter">&times;</button>
+  
   <!-- NEW Bravo Iframe -->
-  <iframe src="https://84626b95.sibforms.com/serve/MUIFAEZRMA9XI6yp5-9I_5gXKQI4DUUT0vXVwDmhMCEwdyVXT7qPTG5hdkNXkb_eL_IAKLdNmNVPQSzKzhUw2AQmsk4STpAoxIMkD-2R4YolSsP5Jk0T0Bvh2ilSGzA7UAOQPtwjGubdQauk6vy_llAXLEMzgv8Q2b0-p3XOryayZK6e7IFN4WfXLP1DxyMEcEDQ9FM7RZvMSw3SHQ==" allowfullscreen scrolling="auto"></iframe>
+  <iframe src="https://84626b95.sibforms.com/serve/MUIFAEZRMA9XI6yp5-9I_5gXKQI4DUUT0vXVwDmhMCEwdyVXT7qPTG5hdkNXkb_eL_IAKLdNmNVPQSzKzhUw2AQmsk4STpAoxIMkD-2R4YolSsP5Jk0T0Bvh2ilSGzA7UAOQPtwjGubdQauk6vy_llAXLEMzgv8Q2b0-p3XOryayZK6e7IFN4WfXLP1DxyMEcEDQ9FM7RZvMSw3SHQ==" frameborder="0" scrolling="auto" allowfullscreen style="display: block;margin-left: auto;margin-right: auto;max-width: 100%;"></iframe>
 </div>
 
 <script>
-// Intersection Fade-In
+// Fade-in sections
 const sections = document.querySelectorAll('section');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => entry.target.classList.toggle('visible', entry.isIntersecting));
-}, { threshold:0.25 });
+const observer = new IntersectionObserver(entries => entries.forEach(entry => entry.target.classList.toggle('visible', entry.isIntersecting)), { threshold:0.25 });
 sections.forEach(sec => observer.observe(sec));
 
 // Newsletter modal
@@ -165,34 +158,19 @@ window.addEventListener('load', ()=>setTimeout(showNewsletter,2000));
 closeBtn.onclick = overlay.onclick = closeNewsletter;
 window.addEventListener('message', e => { if(e.data==='closeNewsletter') closeNewsletter(); });
 
-// Particle System
+// Particle system
 const canvas = document.getElementById('particle-canvas');
 const ctx = canvas.getContext('2d');
+let particles = [];
 let width = canvas.width = window.innerWidth;
 let height = canvas.height = window.innerHeight;
 const particleCount = 80;
-let particles = [];
 
 class Particle {
   constructor() { this.reset(); }
-  reset() {
-    this.x=Math.random()*width;
-    this.y=Math.random()*height;
-    this.size=Math.random()*2+1;
-    this.speed=Math.random()*0.3+0.1;
-    this.angle=Math.random()*2*Math.PI;
-  }
-  update() {
-    this.x+=Math.cos(this.angle)*this.speed;
-    this.y+=Math.sin(this.angle)*this.speed;
-    if(this.x<0||this.x>width||this.y<0||this.y>height) this.reset();
-  }
-  draw() {
-    ctx.fillStyle="rgba(255,255,255,0.08)";
-    ctx.beginPath();
-    ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-    ctx.fill();
-  }
+  reset() { this.x=Math.random()*width; this.y=Math.random()*height; this.size=Math.random()*2+1; this.speed=Math.random()*0.3+0.1; this.angle=Math.random()*2*Math.PI; }
+  update() { this.x+=Math.cos(this.angle)*this.speed; this.y+=Math.sin(this.angle)*this.speed; if(this.x<0||this.x>width||this.y<0||this.y>height)this.reset(); }
+  draw() { ctx.fillStyle="rgba(255,255,255,0.08)"; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); }
 }
 
 function initParticles(){ particles=[]; for(let i=0;i<particleCount;i++) particles.push(new Particle()); }
