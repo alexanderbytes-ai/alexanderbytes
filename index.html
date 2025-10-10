@@ -102,7 +102,7 @@ section.visible { opacity:1; transform:translateY(0); }
   100% { transform: translate(-50%,-50%) scale(1); }
 }
 
-#newsletter-modal iframe { width:100%; height:55vh; min-height:350px; border-radius:14px; border:none; }
+#newsletter-modal iframe { width:100%; height:55vh; min-height:350px; border-radius:14px; border:none; display:block; margin:0 auto; }
 #close-newsletter {
   position:absolute; top:15px; right:15px;
   background:none; border:none; font-size:1.8rem; color:#fff; cursor:pointer;
@@ -129,7 +129,8 @@ section.visible { opacity:1; transform:translateY(0); }
 <div id="modal-overlay"></div>
 <div id="newsletter-modal">
   <button id="close-newsletter">&times;</button>
-  <iframe src="newsletter.html"></iframe>
+  <!-- Brevo iframe -->
+  <iframe src="https://84626b95.sibforms.com/serve/MUIFAEZRMA9XI6yp5-9I_5gXKQI4DUUT0vXVwDmhMCEwdyVXT7qPTG5hdkNXkb_eL_IAKLdNmNVPQSzKzhUw2AQmsk4STpAoxIMkD-2R4YolSsP5Jk0T0Bvh2ilSGzA7UAOQPtwjGubdQauk6vy_llAXLEMzgv8Q2b0-p3XOryayZK6e7IFN4WfXLP1DxyMEcEDQ9FM7RZvMSw3SHQ==" frameborder="0" scrolling="auto" allowfullscreen style="display:block;margin-left:auto;margin-right:auto;max-width:100%;"></iframe>
 </div>
 
 <script>
@@ -170,16 +171,8 @@ class Particle {
   constructor() { this.reset(); }
   reset() { this.x=Math.random()*width; this.y=Math.random()*height; this.size=Math.random()*2+1; this.speed=Math.random()*0.3+0.1; this.angle=Math.random()*2*Math.PI; }
   update() { this.x+=Math.cos(this.angle)*this.speed; this.y+=Math.sin(this.angle)*this.speed; if(this.x<0||this.x>width||this.y<0||this.y>height)this.reset(); }
-  draw() { ctx.fillStyle="rgba(255,255,255,0.08)"; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); }
-}
+  draw() { ctx.fillStyle="rgba(255,255,255,0.
 
-function initParticles(){ particles=[]; for(let i=0;i<particleCount;i++) particles.push(new Particle()); }
-function animateParticles(){ ctx.clearRect(0,0,width,height); particles.forEach(p=>{ p.update(); p.draw(); }); requestAnimationFrame(animateParticles); }
-
-window.addEventListener('resize', ()=>{ width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; initParticles(); });
-
-initParticles();
-animateParticles();
 </script>
 </body>
 </html>
