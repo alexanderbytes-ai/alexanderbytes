@@ -105,29 +105,18 @@
     <h2>Stay Connected 🚀</h2>
     <p>Get updates on new drops, projects, and behind-the-scenes content.</p>
 
-    <!-- Brevo Embed Form -->
-    <iframe 
-      src="https://84626b95.sibforms.com/serve/MUIFAC8qO9T_IgHNrbuyn8UKr3kv1zPIVCSNSzJN10N42tdRB2nywPdGHvhQLO-XTB7sVi0qJHoHidRJxMrJ1FzO1oNN4BozPZMFX5cFdXEoLOcY1gsOx_G0TZ7OqLyoYkuO5JyEgVoc6_SVsXTSf5tgKZ_bJeLr8bP1M5vdnDSV3Jm2Fo42PWGRDBavGzbulcJuw3LqVTPp_quP-A==" 
-      width="540" 
-      height="400" 
-      frameborder="0" 
-      scrolling="auto" 
-      allowfullscreen
-      style="display:block; margin:0 auto; max-width:100%; border-radius:12px; box-shadow:0 0 30px rgba(0,0,0,0.3);">
-    </iframe>
+    <!-- Brevo Embed Form WITHOUT reCAPTCHA -->
+    <iframe src="https://84626b95.sibforms.com/serve/MUIFAPqwJiG3XZTzPvZ8Zqt_a65sjZPFGyOj3XdS0MkrDL9maLn2_XdxyLb3aapBHhhw6-fcJg3rn3JfO_Bjczc523TQHD9vwB-irH_ynRMB3Hf8EFfzrbRcSyWr8w6FfMDODGMfiI-DE6tzjw6jIVviJN7xlEzQQxBXRd1GdoNDSN0pqPYvH9ZlB1K0tV9IImIEL4ypCQMmvUYyzA==" width="540" height="400" frameborder="0" scrolling="auto" allowfullscreen></iframe>
   </section>
 
   <script>
-    // Intersection observer to animate sections on scroll
+    // Animate sections on scroll
     const sections = document.querySelectorAll('section');
-    const obsOptions = { threshold: 0.3 };
-    const observer = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('visible');
       });
-    }, obsOptions);
+    }, { threshold: 0.3 });
     sections.forEach(sec => observer.observe(sec));
   </script>
 
